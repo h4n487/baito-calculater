@@ -45,14 +45,24 @@
     }
     </style>
   <h1>アルバイト給料計算</h1>
+   <label>日付</label>
+  <input type="date" id="date">
+  <style>
+    label {
+      display: block;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+    </style>
+
   <p>時給</p>
     <style>
       p {
         text-align: center;
       }
     </style>
-    
-  <input type="number" id="hourlyWage" placeholder="時給を入力してください">
+ 
+  <input type="number" id="HourlyWage" placeholder="時給を入力してください">
   <p>勤務時間</p>
   <input type="number" id="workingHours" placeholder="時間を入力してください">
   <input type="number" id="workingMinutes" placeholder="分を入力してください">
@@ -71,6 +81,7 @@
         text-align: center;
       }
     </style>
+  
   <button onclick="calculateSalary()">計算</button>
     <style>
       button {
@@ -90,11 +101,48 @@
         background-color: #45a049;
       }
   </style>
-  <script>
+  
+  
+  <style>
+    #saveBtn {
+      width: 50%;
+      padding: 10px; 
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2196F3;
+      color: white;
+      cursor: pointer;
+      max-width: 400px;
+      display: block;
+      margin: 10px auto;
+    }
+    #saveBtn:hover {
+      background-color: #0b7dda;
+    }
+  </style>
+  
+
+    <style>
+      #result {
+        text-decoration:underline;
+      }
+    </style>
+  <h2>結果</h2>
+    <style>
+      h2 {
+        text-align: center;
+        color: #000000;
+      }
+    </style>
+   
+  <p id="result"></p>
+  <button id="saveBtn">保存</button>
+    <script>
    const NIGHT_RATE = 1.25;
 
 function calculateSalary() {
-  const hourlyWage = parseFloat(document.getElementById('hourlyWage').value);
+  const hourlyWage = parseFloat(document.getElementById('HourlyWage').value);
   const hours = parseFloat(document.getElementById('workingHours').value);
   const minutes = parseFloat(document.getElementById('workingMinutes').value) || 0;
   const nightHours = parseFloat(document.getElementById('nightHours').value) || 0;
@@ -119,20 +167,23 @@ function calculateSalary() {
 
   document.getElementById('result').innerText = `総給料は ${Math.round(salary)} 円です。`;
 }
+ document.getElementById("saveBtn").addEventListener("click", function () { 
+  const record = {
+    date: document.getElementById("date").value,
+    wage: Number(document.getElementById("HourlyWage").value),
+    hours: Number(document.getElementById("workingHours").value),
+    minutes: Number(document.getElementById("workingMinutes").value),
+    nightHours: Number(document.getElementById("nightHours").value),
+    transportationCost: Number(document.getElementById("transportationCost").value),
+    totalSalary: document.getElementById("result").innerText
+  };
+  
+  const records = JSON.parse(localStorage.getItem("records")) || [];
+  records.push(record);
+  localStorage.setItem("records", JSON.stringify(records));
 
-  </script>
-    <style>
-      #result {
-        text-decoration:underline;
-      }
-    </style>
-  <h2>結果</h2>
-    <style>
-      h2 {
-        text-align: center;
-        color: #000000;
-      }
-    </style>
-  <p id="result"></p>
+ 
+});
+  </script> 
 </body>
 </html>
