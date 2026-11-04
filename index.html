@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アルバイト給料計算</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input {
+      margin-bottom: 10px;
+      padding: 5px;
+      width: 200px;
+    }
+    button {
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <style> 
+    h1 {
+      color: #45a049;
+      font-family: Arial, sans-serif;
+      text-align: center;
+
+    }
+    body {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    </style>
+  <h1>アルバイト給料計算</h1>
+  <p>時給</p>
+    <style>
+      p {
+        text-align: center;
+      }
+    </style>
+    
+  <input type="number" id="hourlyWage" placeholder="時給を入力してください">
+  <p>勤務時間</p>
+  <input type="number" id="workingHours" placeholder="時間を入力してください">
+  <input type="number" id="workingMinutes" placeholder="分を入力してください">
+    <p>深夜勤務(22:00〜5:00)時間</p>
+  <input type="number" id="nightHours" placeholder="深夜勤務時間を入力してください">
+  <p>交通費</p>
+  <input type="number" id="transportationCost" placeholder="交通費を入力してください">
+    <style> 
+      input {
+        width: 100%;
+        padding: 10px; 
+        font-size: 18px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        text-align: center;
+      }
+    
+  <button onclick="calculateSalary()">計算</button>
+    <style>
+      button {
+        width: 50%;
+        padding: 10px; 
+        font-size: 18px;
+        border: none;
+        border-radius: 8px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        max-width: 400px;
+        display: block;
+        margin: 10px auto;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+  </style>
+  <script>
+   const NIGHT_RATE = 1.25;
+
+function calculateSalary() {
+  const hourlyWage = parseFloat(document.getElementById('hourlyWage').value);
+  const hours = parseFloat(document.getElementById('workingHours').value);
+  const minutes = parseFloat(document.getElementById('workingMinutes').value) || 0;
+  const nightHours = parseFloat(document.getElementById('nightHours').value) || 0;
+  const transportationCost = parseFloat(document.getElementById('transportationCost').value) || 0;
+
+  if (isNaN(hourlyWage) || isNaN(hours) || isNaN(minutes) || isNaN(nightHours) || isNaN(transportationCost)) {
+    document.getElementById('result').innerText = 'すべての値を正しく入力してください。';
+    return;
+  }
+
+  const totalHours = hours + minutes / 60;
+
+  if (nightHours > totalHours) {
+    document.getElementById('result').innerText = '深夜の時間が全体の勤務時間より長くなっています。';
+    return;
+  }
+
+  const normalHours = totalHours - nightHours;
+  const salary = hourlyWage * normalHours
+               + hourlyWage * NIGHT_RATE * nightHours
+               + transportationCost;
+
+  document.getElementById('result').innerText = `総給料は ${Math.round(salary)} 円です。`;
+}
+
+  </script>
+    <style>
+      #result {
+        text-decoration:underline;
+      }
+    </style>
+  <h2>結果</h2>
+    <style>
+      h2 {
+        text-align: center;
+        color: #000000;
+      }
+    </style>
+  <p id="result"></p>
+</body>
+</html>
